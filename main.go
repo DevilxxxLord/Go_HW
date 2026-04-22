@@ -8,3 +8,13 @@ func main() {
 	EURRUB := ConvertUSDRUB / ConvertUSDEUR
 	fmt.Println(EURRUB)
 }
+
+func userScan() string {
+	var str string
+	fmt.Scan(&str)
+	return str
+}
+
+/*func calculation(float64, float64, float64) float64{
+
+}*/
