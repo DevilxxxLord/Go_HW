@@ -15,6 +15,7 @@ func userScan() string {
 	return str
 }
 
-/*func calculation(float64, float64, float64) float64{
+func Convert(amount float64, fromCurrency string, toCurrency string) float64 {
 
-}*/
+	return 0
+}
