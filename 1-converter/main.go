@@ -114,9 +114,9 @@ func selectCurrency(available []string) (string, []string, error) {
 // }
 
 func Convert(amount float64, fromCurrency string, toCurrency string) float64 {
-	mRUB := map[string]float64{"USD": amount / ConvertUSDRUB, "EUR": 1 / ConvertUSDEUR * ConvertUSDRUB}
+	mRUB := map[string]float64{"USD": amount / ConvertUSDRUB, "EUR": amount / (1 / ConvertUSDEUR * ConvertUSDRUB)}
 	mUSD := map[string]float64{"RUB": amount * ConvertUSDRUB, "EUR": amount / ConvertUSDEUR}
-	mEUR := map[string]float64{"RUB": 1 / ConvertUSDEUR * ConvertUSDRUB, "USD": amount * ConvertUSDEUR}
+	mEUR := map[string]float64{"RUB": amount * (1 / ConvertUSDEUR * ConvertUSDRUB), "USD": amount * ConvertUSDEUR}
 
 	m := map[string]float64{"RUB": mRUB[toCurrency], "USD": mUSD[toCurrency], "EUR": mEUR[toCurrency]}
 	res := m[fromCurrency]
