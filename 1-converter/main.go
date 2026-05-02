@@ -85,34 +85,6 @@ func selectCurrency(available []string) (string, []string, error) {
 	return selected, newAvailable, nil
 }
 
-// func Convert(amount float64, fromCurrency string, toCurrency string) float64 {
-// 	var res float64
-// 	fmt.Printf("Конвертируем %.2f %s в %s\n", amount, fromCurrency, toCurrency)
-// 	switch {
-// 	case fromCurrency == "RUB" && toCurrency == "USD":
-// 		res = amount / ConvertUSDRUB
-// 	case fromCurrency == "USD" && toCurrency == "RUB":
-// 		res = amount * ConvertUSDRUB
-// 	case fromCurrency == "EUR" && toCurrency == "RUB":
-// 		res = amount * (1 / ConvertUSDEUR * ConvertUSDRUB)
-// 	case fromCurrency == "RUB" && toCurrency == "EUR":
-// 		res = amount / (1 / ConvertUSDEUR * ConvertUSDRUB)
-// 	case fromCurrency == "USD" && toCurrency == "EUR":
-// 		res = amount / ConvertUSDEUR
-// 	case fromCurrency == "EUR" && toCurrency == "USD":
-// 		res = amount * ConvertUSDEUR
-// 	}
-
-// 	// amount/ConvertUSDRUB //руб в дол
-// 	// amount*ConvertUSDRUB //дол в руб
-// 	// amount *(1/ConvertUSDEUR * ConvertUSDRUB)//евр в руб
-// 	// amount/ (1/ConvertUSDEUR * ConvertUSDRUB) //руб в евр
-// 	// amount / ConvertUSDEUR // дол в евр
-// 	// amount * ConvertUSDEUR // евр в дол
-
-// 	return res
-// }
-
 func Convert(amount float64, fromCurrency string, toCurrency string) float64 {
 	mRUB := map[string]float64{"USD": amount / ConvertUSDRUB, "EUR": amount / (1 / ConvertUSDEUR * ConvertUSDRUB)}
 	mUSD := map[string]float64{"RUB": amount * ConvertUSDRUB, "EUR": amount / ConvertUSDEUR}
