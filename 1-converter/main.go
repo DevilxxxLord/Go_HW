@@ -8,6 +8,9 @@ import (
 const ConvertUSDRUB float64 = 75.03
 const ConvertUSDEUR float64 = 0.85
 
+type mapStrFloat = map[string]float64
+type mapInMap = map[string]map[string]float64
+
 func main() {
 
 	for {
@@ -16,14 +19,18 @@ func main() {
 			fmt.Println(err)
 			continue
 		}
-		//fmt.Println(currency)
 		num, err := number()
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
-		//fmt.Println(num)
-		res := Convert(float64(num), fromCurrency, toCurrency)
+
+		mRUB := mapStrFloat{"USD": float64(num) / ConvertUSDRUB, "EUR": float64(num) / (1 / ConvertUSDEUR * ConvertUSDRUB)}
+		mUSD := mapStrFloat{"RUB": float64(num) * ConvertUSDRUB, "EUR": float64(num) / ConvertUSDEUR}
+		mEUR := mapStrFloat{"RUB": float64(num) * (1 / ConvertUSDEUR * ConvertUSDRUB), "USD": float64(num) * ConvertUSDEUR}
+		m := mapInMap{"RUB": mRUB, "USD": mUSD, "EUR": mEUR}
+		mMap := &m
+		res := resConvert(mMap, fromCurrency, toCurrency)
 		fmt.Printf("Результат конвертации %s в %s: %.2f", fromCurrency, toCurrency, res)
 		break
 	}
@@ -85,13 +92,12 @@ func selectCurrency(available []string) (string, []string, error) {
 	return selected, newAvailable, nil
 }
 
-func Convert(amount float64, fromCurrency string, toCurrency string) float64 {
-	mRUB := map[string]float64{"USD": amount / ConvertUSDRUB, "EUR": amount / (1 / ConvertUSDEUR * ConvertUSDRUB)}
-	mUSD := map[string]float64{"RUB": amount * ConvertUSDRUB, "EUR": amount / ConvertUSDEUR}
-	mEUR := map[string]float64{"RUB": amount * (1 / ConvertUSDEUR * ConvertUSDRUB), "USD": amount * ConvertUSDEUR}
+func resConvert(m *mapInMap, fromCurrency string, toCurrency string) float64 {
+	// mRUB := mapStrFloat{"USD": amount / ConvertUSDRUB, "EUR": amount / (1 / ConvertUSDEUR * ConvertUSDRUB)}
+	// mUSD := mapStrFloat{"RUB": amount * ConvertUSDRUB, "EUR": amount / ConvertUSDEUR}
+	// mEUR := mapStrFloat{"RUB": amount * (1 / ConvertUSDEUR * ConvertUSDRUB), "USD": amount * ConvertUSDEUR}
 
-	m := map[string]float64{"RUB": mRUB[toCurrency], "USD": mUSD[toCurrency], "EUR": mEUR[toCurrency]}
-	res := m[fromCurrency]
-
+	// m := mapInMap{"RUB": mRUB, "USD": mUSD, "EUR": mEUR}
+	res := (*m)[fromCurrency][toCurrency]
 	return res
 }
