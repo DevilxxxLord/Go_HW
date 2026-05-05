@@ -942,28 +942,170 @@ import (
 // 	file.Write(content)
 // }
 
+// package main
+
+// import (
+// 	"encoding/json"
+// 	"fmt"
+// 	"os"
+// )
+
+// // **Описание**: Создайте программу для добавления нового аккаунта в существующий слайс аккаунтов внутри структуры Vault
+// //
+// // **Входные данные**: Структура Vault с полем Accounts (слайс аккаунтов) и новый аккаунт для добавления (значения задаются в коде)
+// //
+// // **Выходные данные**: Обновленная структура Vault с добавленным аккаунтом, выведенная в JSON формате
+// //
+// // **Ограничения**:
+// // - Используйте структурные теги для JSON
+// // - Новый аккаунт добавляется в конец слайса
+// // - Выведите итоговый JSON на экран
+// //
+// // **Примеры**:
+// // Входные данные: Vault{Accounts: []Account{{URL: "site1.com", User: "user1", Pass: "pass1"}}} и новый Account{URL: "site2.com", User: "user2", Pass: "pass2"}
+// // Output: {"accounts":[{"url":"site1.com","user":"user1","pass":"pass1"},{"url":"site2.com","user":"user2","pass":"pass2"}]}
+
+// type Account struct {
+// 	// Ваш код здесь
+// 	URL  string `json:"url"`
+// 	User string `json:"user"`
+// 	Pass string `json:"pass"`
+// }
+
+// type Vault struct {
+// 	// Ваш код здесь
+// 	Accounts []Account `json:"accounts"`
+// }
+
+// func NewVault() *Vault {
+// 	return &Vault{
+// 		Accounts: []Account{},
+// 	}
+// }
+
+// func (vault *Vault) AddAccounts(acc Account) {
+// 	vault.Accounts = append(vault.Accounts, acc)
+// }
+
+// // Переводим в байты
+// func (vault *Vault) ToBits(name string) error {
+// 	file, err := json.Marshal(vault)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return os.WriteFile(name, file, 0644)
+// }
+
+// func main() {
+// 	// Ваш код здесь
+// 	vault, err := CreatedFiles("account.json")
+// 	acc := Account{
+// 		URL:  "site2.com",
+// 		User: "user2",
+// 		Pass: "pass2",
+// 	}
+// 	vault.AddAccounts(acc)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	err = vault.ToBits("account.json")
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	b, _ := json.Marshal(vault)
+// 	fmt.Println(string(b))
+// }
+
+// // Создание или добавление файла
+// func CreatedFiles(name string) (*Vault, error) {
+// 	data, err := os.ReadFile(name)
+// 	if err != nil {
+// 		if os.IsNotExist(err) {
+// 			return NewVault(), nil // файла нет — новый хранитель
+// 		}
+// 		return nil, err
+// 	}
+// 	var vault Vault
+// 	err = json.Unmarshal(data, &vault)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return &vault, nil
+// }
+
+// package main
+
+// import (
+// 	"fmt"
+// 	"os"
+// )
+
+// // **Описание**: Создайте программу для проверки существования файла и вывода соответствующего сообщения
+// //
+// // **Входные данные**: Имя файла задается в коде как строковая константа
+// //
+// // **Выходные данные**: Сообщение о существовании файла в формате:
+// // - "Файл [имя] существует" - если файл найден
+// // - "Файл [имя] не найден" - если файл отсутствует
+// //
+// // **Ограничения**:
+// // - Используйте os.Stat для проверки существования файла
+// // - Используйте os.IsNotExist для проверки типа ошибки
+// // - Имя файла задается в коде как константа
+// //
+// // **Примеры**:
+// // Входные данные: filename := "data.txt" (файл существует)
+// // Output: Файл data.txt существует
+// //
+// // Входные данные: filename := "missing.txt" (файл отсутствует)
+// // Output: Файл missing.txt не найден
+
+// func main() {
+// 	filename := "config.json"
+
+// 	// Ваш код здесь
+// 	b := checkFile(filename)
+// 	if b {
+// 		fmt.Printf("Файл %v существует", filename)
+// 	} else {
+// 		fmt.Printf("Файл %v не найден", filename)
+// 	}
+// }
+
+// func checkFile(name string) bool {
+// 	_, err := os.Stat(name)
+// 	if err != nil {
+// 		if os.IsNotExist(err) {
+// 			return false
+// 		}
+// 	}
+// 	return true
+// }
+
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
+	"strings"
 )
 
-// **Описание**: Создайте программу для добавления нового аккаунта в существующий слайс аккаунтов внутри структуры Vault
+// **Описание**: Создайте программу для поиска аккаунтов по части URL в структуре Vault
 //
-// **Входные данные**: Структура Vault с полем Accounts (слайс аккаунтов) и новый аккаунт для добавления (значения задаются в коде)
+// **Входные данные**: Структура Vault с полем Accounts (слайс аккаунтов) и строка для поиска (значения задаются в коде)
 //
-// **Выходные данные**: Обновленная структура Vault с добавленным аккаунтом, выведенная в JSON формате
+// **Выходные данные**: Слайс найденных аккаунтов в JSON формате
 //
 // **Ограничения**:
-// - Используйте структурные теги для JSON
-// - Новый аккаунт добавляется в конец слайса
-// - Выведите итоговый JSON на экран
+// - Используйте strings.Contains для поиска
+// - Поиск должен быть регистрозависимым
+// - Если ничего не найдено, верните пустой слайс
 //
 // **Примеры**:
-// Входные данные: Vault{Accounts: []Account{{URL: "site1.com", User: "user1", Pass: "pass1"}}} и новый Account{URL: "site2.com", User: "user2", Pass: "pass2"}
-// Output: {"accounts":[{"url":"site1.com","user":"user1","pass":"pass1"},{"url":"site2.com","user":"user2","pass":"pass2"}]}
+// Входные данные: Vault{Accounts: []Account{{URL: "github.com", User: "alice", Pass: "pass1"}, {URL: "gitlab.com", User: "bob", Pass: "pass2"}}} и поисковая строка "git"
+// Output: [{"url":"github.com","user":"alice","pass":"pass1"},{"url":"gitlab.com","user":"bob","pass":"pass2"}]
+//
+// Входные данные: Vault{Accounts: []Account{{URL: "example.com", User: "test", Pass: "pwd"}}} и поисковая строка "github"
+// Output: []
 
 type Account struct {
 	// Ваш код здесь
@@ -977,38 +1119,19 @@ type Vault struct {
 	Accounts []Account `json:"accounts"`
 }
 
-// Переводим в байты
-func (acc *Account) ToBits() ([]byte, error) {
-	file, err := json.Marshal(acc)
-	if err != nil {
-		return nil, err
-	}
-	return file, nil
-}
-
 func main() {
 	// Ваш код здесь
-	acc := Account{
-		URL:  "site2.com",
-		User: "user2",
-		Pass: "pass2",
-	}
-	file, err := acc.ToBits()
-	if err != nil {
-		fmt.Println(err)
-	}
-	CreatedFiles(file, "account.json")
+	vault := Vault{Accounts: []Account{{URL: "github.com", User: "alice", Pass: "pass1"}, {URL: "gitlab.com", User: "bob", Pass: "pass2"}}}
+	acc := FinderURL(&vault, "git")
+	fmt.Println(acc)
 }
 
-// Создание или добавление в файл
-func CreatedFiles(content []byte, name string) {
-	file, err := os.Create(name)
-	if err != nil {
-		fmt.Println(err)
+func FinderURL(vault *Vault, finder string) (acc []Account) {
+	for _, str := range vault.Accounts {
+		if !strings.Contains(str.URL, finder) {
+			continue
+		}
+		acc = append(acc, str)
 	}
-	_, err = file.Write(content)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("Файл записан")
+	return acc
 }
