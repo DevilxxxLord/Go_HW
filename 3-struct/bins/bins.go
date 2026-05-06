@@ -6,24 +6,24 @@ import (
 )
 
 type Bin struct {
-	id        string
-	private   bool
-	createdAt time.Time
-	name      string
+	Id        string    `json:"id"`
+	Private   bool      `json:"private"`
+	CreatedAt time.Time `json:"createdAt"`
+	Name      string    `json:"name"`
 }
 
 var BinList = []Bin{}
 
 func createdBin(b *Bin) (c *Bin, err error) {
-	if b.id == "" {
+	if b.Id == "" {
 		return nil, errors.New("INVALID_ID")
 	}
-	if b.name == "" {
+	if b.Name == "" {
 		return nil, errors.New("INVALID_NAME")
 	}
 	return c, nil
 }
 
-func createdBinList([]Bin) {
+// func CreatedBinList([]Bin) {
 
-}
+// }
