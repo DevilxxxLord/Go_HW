@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"main/bins"
+	"main/file"
 	"main/storage"
 )
 
@@ -34,6 +35,13 @@ func main() {
 		return
 	}
 	fmt.Println(*str)
+
+	fileByteNoJson, err := file.ReadFiles("account.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(fileByteNoJson)
 }
 
 func ToBit(acc bins.Bin) ([]byte, error) {
