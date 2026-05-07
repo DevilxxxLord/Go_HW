@@ -2,6 +2,7 @@ package bins
 
 import (
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -14,16 +15,27 @@ type Bin struct {
 
 var BinList = []Bin{}
 
-func createdBin(b *Bin) (c *Bin, err error) {
+func checkBin(b *Bin) error {
 	if b.Id == "" {
-		return nil, errors.New("INVALID_ID")
+		return errors.New("INVALID_ID")
 	}
 	if b.Name == "" {
-		return nil, errors.New("INVALID_NAME")
+		return errors.New("INVALID_NAME")
 	}
-	return c, nil
+	return nil
 }
 
-// func CreatedBinList([]Bin) {
+func (b *Bin) CreatedBinList(id string, private bool, name string) (binList []Bin) {
+	b.Id = id
+	b.Private = private
+	b.CreatedAt = time.Now()
+	b.Name = name
+	err := checkBin(b)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
 
-// }
+	binList = append(binList, *b)
+	return binList
+}

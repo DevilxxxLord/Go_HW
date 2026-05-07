@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"main/bins"
 	"main/storage"
-	"time"
 )
 
 // type Account struct {
@@ -15,13 +14,20 @@ import (
 
 func main() {
 	fileName := "account.json"
-	b := bins.Bin{
-		Id:        "1",
-		Private:   true,
-		CreatedAt: time.Now(),
-		Name:      "Aaaa",
-	}
-	fileByte, err := ToBit(b)
+	id := "123"
+	priv := true
+	name := "qweqeqw"
+	// b := bins.Bin{
+	// 	Id:        "1",
+	// 	Private:   true,
+	// 	CreatedAt: time.Now(),
+	// 	Name:      "Aaaa",
+	// }
+
+	b := &bins.Bin{}
+	b.CreatedBinList(id, priv, name)
+
+	fileByte, err := ToBit(*b)
 	if err != nil {
 		fmt.Println(err)
 		return
