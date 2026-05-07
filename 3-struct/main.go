@@ -17,12 +17,6 @@ func main() {
 	id := "123"
 	priv := true
 	name := "qweqeqw"
-	// b := bins.Bin{
-	// 	Id:        "1",
-	// 	Private:   true,
-	// 	CreatedAt: time.Now(),
-	// 	Name:      "Aaaa",
-	// }
 
 	b := &bins.Bin{}
 	b.CreatedBinList(id, priv, name)
@@ -33,6 +27,13 @@ func main() {
 		return
 	}
 	storage.SaveStorage(fileByte, fileName)
+
+	str, err := storage.ReadJson(fileName)
+	if err != nil {
+		fmt.Println("Ошибка чтения файла json")
+		return
+	}
+	fmt.Println(*str)
 }
 
 func ToBit(acc bins.Bin) ([]byte, error) {
