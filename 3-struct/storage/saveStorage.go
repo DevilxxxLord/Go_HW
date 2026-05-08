@@ -5,5 +5,5 @@ import (
 )
 
 func SaveStorage(fileJson []byte, name string) {
-	os.WriteFile(name, fileJson, os.FileMode(os.O_CREATE))
+	os.WriteFile(name, fileJson, 0644)
 }

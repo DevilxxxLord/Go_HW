@@ -1,19 +1,17 @@
 package file
 
 import (
-	"errors"
 	"os"
 	"path/filepath"
 )
 
-func ReadFiles(name string) ([]byte, error) {
+func ReadFiles(name string) ([]byte, bool, error) {
 	b, err := os.ReadFile(name)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 	if filepath.Ext(name) == ".json" {
-		err := errors.New("Расширение файла не должно быть .json")
-		return nil, err
+		return nil, true, err
 	}
-	return b, nil
+	return b, false, nil
 }

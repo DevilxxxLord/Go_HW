@@ -15,12 +15,14 @@ import (
 
 func main() {
 	fileName := "account.json"
-	id := "123"
+	id := "1111"
 	priv := true
 	name := "qweqeqw"
 
 	b := &bins.Bin{}
 	b.CreatedBinList(id, priv, name)
+
+	bins.BinList = append(bins.BinList, *b) //Нужно это или нет, пока не понятно
 
 	fileByte, err := ToBit(*b)
 	if err != nil {
@@ -36,10 +38,13 @@ func main() {
 	}
 	fmt.Println(*str)
 
-	fileByteNoJson, err := file.ReadFiles("account.txt")
+	fileByteNoJson, jsOrNot, err := file.ReadFiles("account.txt")
 	if err != nil {
 		fmt.Println(err)
 		return
+	}
+	if jsOrNot {
+		fmt.Println("Файл с разрешением .json")
 	}
 	fmt.Println(fileByteNoJson)
 }
