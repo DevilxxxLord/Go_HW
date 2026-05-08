@@ -11,7 +11,7 @@ func ReadFiles(name string) ([]byte, bool, error) {
 		return nil, false, err
 	}
 	if filepath.Ext(name) == ".json" {
-		return nil, true, err
+		return b, true, err
 	}
 	return b, false, nil
 }

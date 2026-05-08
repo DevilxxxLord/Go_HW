@@ -13,8 +13,6 @@ type Bin struct {
 	Name      string    `json:"name"`
 }
 
-var BinList = []Bin{}
-
 func checkBin(b *Bin) error {
 	if b.Id == "" {
 		return errors.New("INVALID_ID")

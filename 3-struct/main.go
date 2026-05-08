@@ -8,12 +8,8 @@ import (
 	"main/storage"
 )
 
-// type Account struct {
-// 	Name string `json:"name"`
-// 	Age  int    `json:"age"`
-// }
-
 func main() {
+	var BinList = []bins.Bin{}
 	fileName := "account.json"
 	id := "1111"
 	priv := true
@@ -22,9 +18,9 @@ func main() {
 	b := &bins.Bin{}
 	b.CreatedBinList(id, priv, name)
 
-	bins.BinList = append(bins.BinList, *b) //Нужно это или нет, пока не понятно
+	BinList = append(BinList, *b)
 
-	fileByte, err := ToBit(*b)
+	fileByte, err := ToBit(BinList)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -36,7 +32,7 @@ func main() {
 		fmt.Println("Ошибка чтения файла json")
 		return
 	}
-	fmt.Println(*str)
+	fmt.Println(str)
 
 	fileByteNoJson, jsOrNot, err := file.ReadFiles("account.txt")
 	if err != nil {
@@ -49,7 +45,7 @@ func main() {
 	fmt.Println(fileByteNoJson)
 }
 
-func ToBit(acc bins.Bin) ([]byte, error) {
+func ToBit(acc []bins.Bin) ([]byte, error) {
 	fileJson, err := json.Marshal(acc)
 	if err != nil {
 		return nil, err
