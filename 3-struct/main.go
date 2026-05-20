@@ -3,15 +3,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"main/adapted"
 	"main/bins"
-	"main/file"
-	"main/storage"
 )
 
 func main() {
+	var all adapted.All = &adapted.Adapted{}
 	var BinList = []bins.Bin{}
 	fileName := "account.json"
-	id := "1111"
+	id := "3333"
 	priv := true
 	name := "qweqeqw"
 
@@ -25,16 +25,16 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	storage.SaveStorage(fileByte, fileName)
+	all.SaveStorage(fileByte, fileName)
 
-	str, err := storage.ReadJson(fileName)
+	str, err := all.ReadJson(fileName)
 	if err != nil {
 		fmt.Println("Ошибка чтения файла json")
 		return
 	}
 	fmt.Println(str)
 
-	fileByteNoJson, jsOrNot, err := file.ReadFiles("account.txt")
+	fileByteNoJson, jsOrNot, err := all.ReadFiles("account.txt")
 	if err != nil {
 		fmt.Println(err)
 		return
