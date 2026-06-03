@@ -8,6 +8,9 @@ import (
 const ConvertUSDRUB float64 = 75.03
 const ConvertUSDEUR float64 = 0.85
 
+type mapStrFloat = map[string]float64
+type mapInMap = map[string]map[string]float64
+
 func main() {
 
 	for {
@@ -16,14 +19,18 @@ func main() {
 			fmt.Println(err)
 			continue
 		}
-		//fmt.Println(currency)
 		num, err := number()
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
-		//fmt.Println(num)
-		res := Convert(float64(num), fromCurrency, toCurrency)
+
+		mRUB := mapStrFloat{"USD": float64(num) / ConvertUSDRUB, "EUR": float64(num) / (1 / ConvertUSDEUR * ConvertUSDRUB)}
+		mUSD := mapStrFloat{"RUB": float64(num) * ConvertUSDRUB, "EUR": float64(num) / ConvertUSDEUR}
+		mEUR := mapStrFloat{"RUB": float64(num) * (1 / ConvertUSDEUR * ConvertUSDRUB), "USD": float64(num) * ConvertUSDEUR}
+		m := mapInMap{"RUB": mRUB, "USD": mUSD, "EUR": mEUR}
+		mMap := &m
+		res := resConvert(mMap, fromCurrency, toCurrency)
 		fmt.Printf("Результат конвертации %s в %s: %.2f", fromCurrency, toCurrency, res)
 		break
 	}
@@ -85,30 +92,12 @@ func selectCurrency(available []string) (string, []string, error) {
 	return selected, newAvailable, nil
 }
 
-func Convert(amount float64, fromCurrency string, toCurrency string) float64 {
-	var res float64
-	fmt.Printf("Конвертируем %.2f %s в %s\n", amount, fromCurrency, toCurrency)
-	switch {
-	case fromCurrency == "RUB" && toCurrency == "USD":
-		res = amount / ConvertUSDRUB
-	case fromCurrency == "USD" && toCurrency == "RUB":
-		res = amount * ConvertUSDRUB
-	case fromCurrency == "EUR" && toCurrency == "RUB":
-		res = amount * (1 / ConvertUSDEUR * ConvertUSDRUB)
-	case fromCurrency == "RUB" && toCurrency == "EUR":
-		res = amount / (1 / ConvertUSDEUR * ConvertUSDRUB)
-	case fromCurrency == "USD" && toCurrency == "EUR":
-		res = amount / ConvertUSDEUR
-	case fromCurrency == "EUR" && toCurrency == "USD":
-		res = amount * ConvertUSDEUR
-	}
+func resConvert(m *mapInMap, fromCurrency string, toCurrency string) float64 {
+	// mRUB := mapStrFloat{"USD": amount / ConvertUSDRUB, "EUR": amount / (1 / ConvertUSDEUR * ConvertUSDRUB)}
+	// mUSD := mapStrFloat{"RUB": amount * ConvertUSDRUB, "EUR": amount / ConvertUSDEUR}
+	// mEUR := mapStrFloat{"RUB": amount * (1 / ConvertUSDEUR * ConvertUSDRUB), "USD": amount * ConvertUSDEUR}
 
-	// amount/ConvertUSDRUB //руб в дол
-	// amount*ConvertUSDRUB //дол в руб
-	// amount *(1/ConvertUSDEUR * ConvertUSDRUB)//евр в руб
-	// amount/ (1/ConvertUSDEUR * ConvertUSDRUB) //руб в евр
-	// amount / ConvertUSDEUR // дол в евр
-	// amount * ConvertUSDEUR // евр в дол
-
+	// m := mapInMap{"RUB": mRUB, "USD": mUSD, "EUR": mEUR}
+	res := (*m)[fromCurrency][toCurrency]
 	return res
 }
