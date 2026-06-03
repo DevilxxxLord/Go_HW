@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"main/adapted"
+	"main/api"
 	"main/bins"
 )
 
 func main() {
+	api.ConnectApi()
 	var all adapted.All = &adapted.Adapted{}
 	var BinList = []bins.Bin{}
 	fileName := "account.json"
